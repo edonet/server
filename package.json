@@ -1,0 +1,24 @@
+{
+  "name": "edonet-server",
+  "version": "0.0.1",
+  "description": "nodejs server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edonet/server.git"
+  },
+  "keywords": [
+    "node",
+    "js",
+    "server"
+  ],
+  "author": "lifx",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/edonet/server/issues"
+  },
+  "homepage": "https://github.com/edonet/server#readme"
+}
