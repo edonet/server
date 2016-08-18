@@ -1,2 +1,2 @@
 # server
-build a lit nodejs server
+build a static nodejs server
