@@ -13,11 +13,9 @@ module.exports = (...arr) => (...args) => {
                 return next();
             }
 
-            if (fn.length > args.length) {
-                return fn(...args, next);
-            } else {
-                fn(...args), next();
-            }
+            return fn.length > args.length ? fn(...args, next) :
+                next(fn(...args) === false ? new Error('发生未知的错误') : null);
+
         }, noop)();
     }
 };
