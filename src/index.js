@@ -1,24 +1,51 @@
 'use strict';
 
+
 const
-    app = require('./app');
+    server = require('./server'),
+    assets = require('./assets');
 
 
-class StaticServer {
-    constructor(dir) {
-        this.server = app(dir);
-    }
-    listen(port = 8088) {
-        this.server.listen(port, () => {
-            console.log('');
-            console.log('> -------------------------------------------------');
-            console.log('> server listening on: http://localhost: %s', port);
-            console.log('> open your brower and enjoy it.');
-            console.log('> -------------------------------------------------');
-            console.log('');
+class Server {
+    constructor() {
+        this.handler = [];
+        this.server = server((req, res) => {
+            res.end(JSON.stringify(req));
         });
+    }
+
+    route(type, path, callback) {
+        if (typeof callback !== 'function') {
+            return this;
+        }
+
+        this.handler.push((req, res, next) => {
+            if (req.type === type && req.path === path) {
+                return callback(req, res, next);
+            }
+        });
+
+        return this;
+    }
+
+    get(path, callback) {
+        return this.route('get', path, callback);
+    }
+
+    post(path, callback) {
+        return this.route('post', path, callback);
+    }
+
+    assets(path) {
+        this.feedback = assets(path);
+        return this;
+    }
+
+    listen(port, callback) {
+        this.server.listen(port, callback);
     }
 }
 
 
-module.exports = dir => new StaticServer(dir);
+
+module.exports = options => new Server(options);
