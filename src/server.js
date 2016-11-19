@@ -1,10 +1,22 @@
 'use strict';
 
+/*
+ *****************************
+ * 载入依赖模块
+ *****************************
+ */
+
 const
     http = require('http'),
     url = require('url'),
     qs = require('querystring');
 
+
+/*
+ *****************************
+ * 载入依赖模块
+ *****************************
+ */
 
 let next = cb => (req, res) => {
     let type = req.method.toLowerCase(),
@@ -32,6 +44,12 @@ let next = cb => (req, res) => {
     });
 };
 
+
+/*
+ *****************************
+ * 抛出接口
+ *****************************
+ */
 
 module.exports = handler => {
     return http.createServer(next(handler));
