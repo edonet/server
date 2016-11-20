@@ -13,6 +13,7 @@ const
     mime = require('./mime'),
     queue = require('./queue');
 
+
 /*
  *****************************
  * 定义工具方法

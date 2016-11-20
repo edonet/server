@@ -8,8 +8,7 @@
 
 const
     server = require('./server'),
-    router = require('./router'),
-    respond = require('./respond');
+    router = require('./router');
 
 
 /*
@@ -70,26 +69,11 @@ class App {
 
     /* 定义静态资源路径 */
     assets(dir, options) {
-        this.router.assets(dir, Object.assign({
-            onError: respond(404)
-        }, options));
+        this.router.assets(dir, options);
         return this;
     }
 
-    /* 返回数据 */
-    sendData(data) {
-        return respond('data', data);
-    }
 
-    /* 返回文件 */
-    sendFile(dir, handler) {
-        return respond('file', dir, handler);
-    }
-
-    /* 返回状态码 */
-    respond(state) {
-        return respond(state);
-    }
 
     /* 监听端口 */
     listen(port, callback) {

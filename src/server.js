@@ -9,7 +9,8 @@
 const
     http = require('http'),
     url = require('url'),
-    qs = require('querystring');
+    qs = require('querystring'),
+    response = require('./response');
 
 
 /*
@@ -29,6 +30,9 @@ let next = cb => (req, res) => {
         },
         body = '';
 
+
+    // 处理【response】参数
+    res = response(res);
 
     // 处理【GET】请求
     if (type === 'get') {
