@@ -96,20 +96,20 @@ function zlibResponse(zlibType) {
 
                 // 启用【gzip】压缩
                 res.writeHead(200, 'Ok', {'Content-Encoding': 'gzip'});
-                return raw.pipe(zlib.createGzip()).pipe(res);
+                return raw.pipe(zlib.createGzip()).pipe(res.response);
             }
 
             if (acceptEncoding.match(/\bdeflate\b/)) {
 
                 // 启用【deflate】压缩
                 res.writeHead(200, 'Ok', {'Content-Encoding': 'deflate'});
-                raw.pipe(zlib.createDeflate()).pipe(res);
+                raw.pipe(zlib.createDeflate()).pipe(res.response);
             }
         }
 
         // 直接输出
         res.writeHead(200, 'Ok');
-        raw.pipe(res);
+        raw.pipe(res.response);
     };
 }
 

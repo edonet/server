@@ -11,7 +11,7 @@ const
 
 let
     dist = args.d || args.dist,
-    port = args.p || args.port;
+    port = args.p || args.port || 8088;
 
 
 if (dist && dist !== true) {
@@ -21,4 +21,16 @@ if (dist && dist !== true) {
         path.resolve(cwd, args._[0]) : cwd;
 }
 
-server(dist).listen(port);
+server(dist).listen(port, err => {
+
+    if (err) {
+        return console.log(err);
+    }
+
+    console.log('');
+    console.log('*************************************************');
+    console.log('Listening at localhost: ' + port);
+    console.log('Opening your system browser...');
+    console.log('*************************************************');
+    console.log('');
+});

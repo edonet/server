@@ -8,6 +8,9 @@
  */
 
 const
+    fs = require('fs'),
+    path = require('path'),
+    mime = require('./mime'),
     transfer = require('./transfer');
 
 
@@ -103,30 +106,47 @@ class ServerRes {
 
     // 返回对象
     sendData(data, encoding, callback) {
-        this.response.end(JSON.stringify(data), encoding, callback);
+
+        if (typeof data !== 'string') {
+            data = JSON.stringify(data);
+        }
+
+        this.response.writeHead(200, 'Ok', {'Content-Type': 'application/json'});
+        this.response.end(data, encoding, callback);
         return this;
     }
 
     // 返回文件流
     sendFile(file, handler, callback) {
-        fs.state(file, err => {
+        fs.stat(file, err => {
+
             if (err) {
-                return callback(err);
+                return typeof callback === 'function' && callback(err);
             }
 
-            this.sendStream(fs.createReadStream(file), handler, callback);
+            let ext = path.extname(file).slice(1).toLowerCase(),
+                rs = fs.createReadStream(file);
+
+
+            // 设置Content Type
+            this.response.setHeader('Content-Type', mime[ext] || 'text/plain');
+            this.sendStream(rs, handler, callback);
         });
         return this;
     }
 
     // 返回数据流
     sendStream(stream, handler, callback) {
+
+        this.response.writeHead(200, 'Ok');
         typeof handler === 'function' ?
             stream.pipe(transfer(handler)).pipe(this.response) :
             stream.pipe(this.response);
 
-        stream.on('error', callback);
-        stream.on('end', callback);
+        if (typeof callback === 'function') {
+            stream.on('error', callback);
+            stream.on('end', callback);
+        }
         return this;
     }
 }

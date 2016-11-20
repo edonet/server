@@ -7,6 +7,7 @@
  */
 
 const
+    path = require('path'),
     server = require('./server'),
     router = require('./router');
 
@@ -19,7 +20,8 @@ const
 
 class App {
     constructor(dir) {
-        this.router = router(dir);
+        this.dir = dir || process.cwd();
+        this.router = router(this.dir);
         this.server = server((req, res) => {
             this.router.invoke(req, res);
         });
@@ -45,26 +47,47 @@ class App {
     }
 
     /* 添加默认路由 */
-    route(path, callback) {
+    route(type, url, callback) {
+
+        // 支持传入数组
+        if (Array.isArray(type)) {
+            return type.forEach(v => this.route(v));
+        }
+
+        // 支持传入对象
+        if (typeof type === 'object') {
+
+            // 支持传入路由路径
+            if (typeof type.callback === 'string') {
+                type.callback = require(path.join(this.dir, type.callback));
+            }
+            return this.router.add(type);
+        }
+
+        // 支持只传入两个参数
+        if (callback === undefined) {
+            [type, url, callback] = ['all', type, url];
+        }
+
+        // 支持传入路由路径
+        if (typeof callback === 'string') {
+            callback = require(path.join(this.dir, callback));
+        }
 
         // 添加路由
-        Array.isArray(path) ?
-            path.forEach(v => this.router.add(v)) :
-            this.router.add({path, callback});
+        this.router.add({ type, path: url, callback });
 
         return this;
     }
 
     /* 添加【GET】路由 */
-    get(path, callback) {
-        this.router.add({ type: 'get', path, callback });
-        return this;
+    get(url, callback) {
+        return this.route('get', url, callback);
     }
 
     /* 添加【POST】路由 */
-    post(path, callback) {
-        this.router.add({ type: 'post', path, callback });
-        return this;
+    post(url, callback) {
+        return this.route('post', url, callback);
     }
 
     /* 定义静态资源路径 */

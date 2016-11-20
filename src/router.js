@@ -20,7 +20,7 @@ const
 
 function handler(v) {
     return (req, ...args) => {
-        v.path === req.path && v.callback(req, ...args);
+        return v.path === req.path ? v.callback(req, ...args) : true;
     };
 }
 
@@ -33,9 +33,9 @@ function handler(v) {
 
 class Router {
     constructor(dir) {
-        this.dir = dir;
         this.router = {};
         this.middleware = [];
+        this.dir = dir || process.cwd();
     }
 
     /* 添加路由 */
