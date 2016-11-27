@@ -1,13 +1,58 @@
 'use strict';
 
+
 /*
  *****************************
- * 加载【App】类
+ * 定义【App】类
  *****************************
  */
 
 const
-    App = require('./app');
+    Router = require('./router'),
+    Server = require('./server');
+
+/*
+ *****************************
+ * 定义【App】类
+ *****************************
+ */
+
+ class App {
+    constructor(dir) {
+        this.rootdir = dir;
+        this.router = new Router(dir);
+        this.server = new Server(this.router);
+    }
+
+    /* 添加路由 */
+    route(...args) {
+        this.router.append(...args);
+        return this;
+    }
+
+    /* 监听端口 */
+    listen(port, callback) {
+
+        // 开始监听端口
+        this.port = port;
+        this.server.listen(port, callback || (err => {
+
+            if (err) {
+                return console.log(err);
+            }
+
+            console.log('');
+            console.log('*************************************************');
+            console.log('Listening at localhost: ' + port);
+            console.log('Opening your system browser...');
+            console.log('*************************************************');
+            console.log('');
+
+        }));
+
+        return this;
+    }
+ }
 
 
 /*
@@ -17,5 +62,5 @@ const
  */
 
 module.exports = (dir, router) => {
-    return new App(dir).route(router);
+    return new App(dir || process.cwd()).route(router);
 };
