@@ -12,6 +12,11 @@ function isString(object) {
     return typeof object === 'string';
 }
 
+// 判断是否为数字
+function isNumber(object) {
+    return typeof object === 'number';
+}
+
 // 判断是是否为函数
 function isFunction(object) {
     return typeof object === 'function';
@@ -28,24 +33,65 @@ function isObject(object) {
 }
 
 
-// 重载函数
-function override(...handler) {
-    let overrideCache = {};
+/*
+ *****************************
+ * 函数重载
+ *****************************
+ */
+const overrideCache = {};
 
-    handler.forEach(v => {
-        if (isFunction(v)){
-            overrideCache[v.length] = v;
-        }
-    });
-
-    return (...args) => {
-        let len = args.length;
-
-        if (len in overrideCache) {
-            return overrideCache[len].apply(this, args);
-        }
-    };
+// 设置、获取重载函数
+function override(...args) {
+    return args.length < 2 ?
+        getOverrideHandler(...args) : setOverrideHandler(...args);
 }
+
+// 设置重载函数
+function setOverrideHandler(name, handler) {
+    if (!isString(name) || !isFunction(handler)) {
+        return false;
+    }
+
+    if (!(name in overrideCache)) {
+        overrideCache[name] = [];
+    }
+
+    let cache = overrideCache[name],
+        len = handler.length,
+        l = cache.length;
+
+    while (l --) {
+        if (len >= cache[l].length) {
+            return cache.splice(l + 1, 0, {
+                length: len, handler: handler
+            });
+        }
+    }
+
+    return cache.unshift({
+        length: len, handler: handler
+    });
+}
+
+// 获取重载函数
+function getOverrideHandler(name) {
+    return isString(name) && ((...args) => {
+        let cache = overrideCache[name] || [],
+            len = args.length,
+            l = cache.length;
+
+        while (l --) {
+            let caller = cache[l];
+
+            if (len >= caller.length) {
+                return caller.handler(...args);
+            }
+        }
+
+        return l && cache[0].handler(...args);
+    });
+}
+
 
 /*
  *****************************
@@ -54,5 +100,10 @@ function override(...handler) {
  */
 
 module.exports = {
-    isString, isFunction, isArray, isObject, override
+    isString,
+    isNumber,
+    isFunction,
+    isArray,
+    isObject,
+    override
 };

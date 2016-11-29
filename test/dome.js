@@ -1,22 +1,19 @@
 'use strict';
 
-// const
-//     http = require('http');
-
-// http.createServer((req, res) => {
-//     var data = '';
-
-//     req.on('data', chunk => data += chunk);
-//     req.on('end', err => {
-//         console.log(err);
-//         console.log(data);
-//         res.writeHeader(404, 'Not Found!');
-//         res.end('Error!');
-//         console.log(Object.keys(res));
-//     });
-// }).listen(10088);
+const
+    utils = require('../src/utils')
 
 
-var fun = (...args) => console.log(args.length);
+utils.override('add', (a) => a + 10);
+utils.override('add', (a, b) => a + b);
+utils.override('add', (a, b, c) => a + b - c);
+utils.override('add', (a, b, c, d) => a + b - c - d);
 
-fun(undefined);
+
+let fun = utils.override('add');
+
+console.log(fun(1));
+console.log(fun(1, 2));
+console.log(fun(1, 2, 3));
+console.log(fun(1, 2, 3, 4));
+console.log(fun(1, 2, 3, 4, 5));
