@@ -27,6 +27,17 @@ class App {
         });
     }
 
+    /* 获取【url】路径 */
+    url(name) {
+
+        // 处理相对于根目录的路径
+        if (name[0] === '/') {
+            return path.resolve(this.dir, '.' + name);
+        }
+
+        return path.resolve(this.dir, name);
+    }
+
     /* 添加中间件 */
     use(handler) {
         if (typeof handler === 'function') {
@@ -51,7 +62,8 @@ class App {
 
         // 支持传入数组
         if (Array.isArray(type)) {
-            return type.forEach(v => this.route(v));
+            type.forEach(v => this.route(v));
+            return this;
         }
 
         // 支持传入对象
@@ -59,7 +71,7 @@ class App {
 
             // 支持传入路由路径
             if (typeof type.callback === 'string') {
-                type.callback = require(path.join(this.dir, type.callback));
+                type.callback = require(this.url(type.callback));
             }
             return this.router.add(type);
         }
@@ -71,7 +83,7 @@ class App {
 
         // 支持传入路由路径
         if (typeof callback === 'string') {
-            callback = require(path.join(this.dir, callback));
+            callback = require(this.url(callback));
         }
 
         // 添加路由
@@ -96,7 +108,13 @@ class App {
         return this;
     }
 
-
+    /* 设置允许的请求来源 */
+    allowOrigin(origin, method) {
+        return this.use((req, res) => {
+            res.setHeader('Access-Control-Allow-Origin', origin || '*');
+            res.setHeader('Access-Control-Allow-Methods', method || 'POST, GET');
+        });
+    }
 
     /* 监听端口 */
     listen(port, callback) {
@@ -114,3 +132,5 @@ class App {
  */
 
 module.exports = (dir, router) => new App(dir).route(router);
+
+

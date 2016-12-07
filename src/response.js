@@ -13,6 +13,19 @@ const
     mime = require('./mime'),
     transfer = require('./transfer');
 
+let responseState = {
+        200: res => {
+            return res.writeHead(200, 'Ok');
+        },
+        304: res => {
+            res.writeHead(304, 'Not Modified', {'Content-Type': 'text/html'});
+            return res.end();
+        },
+        404: res => {
+            res.writeHead(404, 'Not Found', {'Content-Type': 'text/html'});
+            return res.end('Error: 404!');
+        }
+    };
 
 /*
  *****************************
@@ -58,25 +71,16 @@ class ServerRes {
     }
 
     // 设置状态信息
-    setState(code, message, header) {
-        if (message === undefined) {
-            switch (code) {
-                case 200:
-                    message = 'Ok';
-                    break;
-                case 304:
-                    message = 'Not Modified';
-                    break;
-                case 404:
-                    message = 'Not Found';
-                    break;
-                default:
-                    break;
-            }
+    setState(code, handler) {
+
+        if (handler === undefined) {
+            responseState[code](this.response);
+        } else if (typeof handler === 'string') {
+            responseState[code] = require(handler);
+        } else if (typeof handler === 'function') {
+            responseState[code] = handler;
         }
 
-        this.response.writeHead(code, message, hander);
-        code !== 200 && this.response.end();
         return this;
     }
 
@@ -121,7 +125,7 @@ class ServerRes {
         fs.stat(file, err => {
 
             if (err) {
-                return typeof callback === 'function' && callback(err);
+                return typeof callback === 'function' ? callback(err) : this.setState(404);
             }
 
             let ext = path.extname(file).slice(1).toLowerCase(),
