@@ -20,8 +20,8 @@ const
  class App {
     constructor(dir) {
         this.rootdir = dir;
-        this.router = new Router(dir);
-        this.server = new Server(this.router);
+        this.router = router(dir);
+        this.server = server(this.router);
     }
 
     /* 添加路由 */
@@ -32,6 +32,9 @@ const
 
     /* 监听端口 */
     listen(port, callback) {
+
+        // 创建路由解析器
+        this.router.resolve();
 
         // 开始监听端口
         this.port = port;

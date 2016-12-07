@@ -17,3 +17,9 @@ console.log(fun(1, 2));
 console.log(fun(1, 2, 3));
 console.log(fun(1, 2, 3, 4));
 console.log(fun(1, 2, 3, 4, 5));
+
+
+let arr = [1, 2, 2];
+
+console.log(fun(4, ...arr));
+

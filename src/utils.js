@@ -80,15 +80,19 @@ function getOverrideHandler(name) {
             len = args.length,
             l = cache.length;
 
-        while (l --) {
-            let caller = cache[l];
+        if (l) {
 
-            if (len >= caller.length) {
-                return caller.handler(...args);
+            // 匹配最佳的方法
+            while (l --) {
+                let caller = cache[l];
+
+                if (len >= caller.length) {
+                    return caller.handler(...args);
+                }
             }
-        }
 
-        return l && cache[0].handler(...args);
+            return cache[0].handler(...args);
+        }
     });
 }
 

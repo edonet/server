@@ -9,7 +9,8 @@
 
 const
     path = require('path'),
-    utils = require('./utils');
+    utils = require('./utils'),
+    appendRouter = createRouteAppend();
 
 /*
  *****************************
@@ -30,12 +31,12 @@ class Router {
         // 处理直接指定中间件文件
         if (utils.isString(handler)) {
             this.middleware.push({
-                dir: path.join(this.rootdir, handler),
+                context: path.join(this.rootdir, handler),
                 handler: require(handler);
             });
         } else if (utils.isFunction(handler)) {
             this.middleware.push({
-                dir: this.rootdir, handler
+                context: this.rootdir, handler
             });
         }
 
@@ -44,15 +45,8 @@ class Router {
 
     append(...args) {
 
-        switch (args.length) {
-            case 0:
-                return this;
-            case 1:
-                return resolveRouteOptions(this, args[0]);
-            default: break;
-        }
-
-        return this;
+        // 添加路由
+        return appendRouter(this, ...args);
     }
 
     // 设置静态资源地址
@@ -60,13 +54,13 @@ class Router {
         this.dir = path.resolve(dir);
     }
 
-    // 创建解析器
-    createResolver() {
-
+    // 解析路由
+    resolve() {
+        return resolveRouter(this);
     }
 
-    // 解析请求
-    resolve(request, response) {
+    // 执行路由
+    invoke(request, response) {
 
         // 监听请求是否准备好
         request.ready(() => {
@@ -87,40 +81,20 @@ class Router {
  */
 
 function createRouteAppend() {
-    return utils.override()
+
+    // 获取重载方法
+    let appendRouter = utils.override('appendRouter');
+
+    // 只有一个参数时
+    utils.override('appendRouter', (router, options) => {
+
+    });
+
+    return appendRouter;
 }
-function resolveRouteOptions(router, options) {
-    let dir = router.rootdir;
 
-    // 如果参数为字符串，则作为文件载入
-    if (utils.isString(options)) {
-        dir = path.join(dir, options);
-        options = require(options);
-    } else if (utils.isArray(options)) {
-        options.map(v => resolveRouteOptions(router, v));
-    } else if (utils.isObject(options)) {
-        let {
-                type = 'all', url, path, handler
-            } = options;
-
-        if (handler) {
-            return {
-                dir,
-                type,
-            };
-        }
-        return {
-            context,
-            type: router.type,
-            url: router.url,
-            path: router.path,
-            handler: router.handler
-        };
-    } else if (utils.isFunction(options)) {
-        router._['all'].push({
-            handler: options
-        });
-    }
+function resolveRouter(router) {
+    return router;
 }
 
 // 设置找不到文件时【404】错误
@@ -134,4 +108,4 @@ function notFound(req, res) {
  *****************************
  */
 
-module.exports = Router;
+module.exports = dir => new Router(dir);
