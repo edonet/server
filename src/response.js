@@ -3,26 +3,13 @@
 
 /*
  *****************************
- * 载入依赖模块
+ * 定义【AppResponse】类
  *****************************
  */
 
-const
-    fs = require('fs'),
-    path = require('path'),
-    mime = require('./mime'),
-    transfer = require('./transfer');
-
-
-/*
- *****************************
- * 定义工具方法
- *****************************
- */
-
-class ServerRes {
-    constructor(res) {
-        this.response = res;
+class AppResponse {
+    constructor(serverResponse) {
+        this.response = serverResponse;
     }
 
     // 设置返回头信息
@@ -158,4 +145,4 @@ class ServerRes {
  *****************************
  */
 
-module.exports = res => new ServerRes(res);
+module.exports = res => new AppResponse(res);

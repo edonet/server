@@ -24,9 +24,31 @@ const
         this.server = server(this.router);
     }
 
+    /* 添加中间件 */
+    use(handler) {
+        this.router.use(handler);
+        return this;
+    }
+
     /* 添加路由 */
     route(...args) {
-        this.router.append(...args);
+        this.router.add(...args);
+        return this;
+    }
+
+    /* 添加【GET】路由 */
+    get(url, handler) {
+        this.router.add({
+            type: 'get', url, handler
+        });
+        return this;
+    }
+
+    /* 添加【POST】路由 */
+    post(url, handler) {
+        this.router.add({
+            type: 'post', url, handler
+        });
         return this;
     }
 

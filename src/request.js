@@ -29,7 +29,7 @@ class AppRequest {
         if (this.type === 'get') {
 
             /* 获取【GET】参数 */
-            this.param = qs.parse(this.url.query);
+            this.params = qs.parse(this.url.query);
 
         } else {
 
@@ -43,13 +43,13 @@ class AppRequest {
 
             /* 监听数据传输完成事件 */
             this.request.on('end', () => {
-                this.param = qs.parse(this.param);
+                this.params = qs.parse(this.param);
             });
         }
     }
 
-    getHeader(name) {
-        return this.header[name] || '';
+    header(name) {
+        return this.headers[name] || '';
     }
 
     ready(handler) {

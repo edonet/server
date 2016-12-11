@@ -1,11 +1,25 @@
 'use strict';
 
+const
+    oStr = Object.prototype.toString;
 
 /*
  *****************************
  * 定义工具方法
  *****************************
  */
+
+// 获取变量数据类型
+function type(...args) {
+    return args.map(v => {
+        return oStr.call(v).slice(8, -1).toLowerCase();
+    }).join(', ');
+}
+
+// 判断是否有些属性
+function isset(object, name) {
+    return name in object;
+}
 
 // 判断是是否为字符串
 function isString(object) {
@@ -99,15 +113,68 @@ function getOverrideHandler(name) {
 
 /*
  *****************************
+ * 遍历对象
+ *****************************
+ */
+
+function each(object, handler, start) {
+
+    // 效验参数为函数
+    if (!isFunction(handler)) {
+        return false;
+    }
+
+    // 遍历数组
+    if (isArray(object)) {
+        let len = object.length,
+            i = 0;
+
+        if (start < 0) {
+            start = len + start;
+        }
+
+        i = start > 0 && start < len ? start : 0;
+
+        for (; i < len; i ++) {
+            if (handler.call(object, i, object[i]) === false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // 遍历对象
+    if (isObject(object)) {
+        for (let key in object) {
+            if (object.hasOwnProperty(key)) {
+                if (handler.call(object, i, object[i]) === false) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+
+/*
+ *****************************
  * 抛出接口
  *****************************
  */
 
 module.exports = {
+    type,
+    isset,
     isString,
     isNumber,
     isFunction,
     isArray,
     isObject,
+    each,
     override
 };

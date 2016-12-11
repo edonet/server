@@ -10,8 +10,7 @@ const
     fs = require('fs'),
     path = require('path'),
     zlib = require('zlib'),
-    mime = require('./mime'),
-    queue = require('./queue');
+    mime = require('./mime');
 
 
 /*
@@ -131,9 +130,18 @@ module.exports = (dir, options = {}) => {
             }
         } = options;
 
-    return queue([
-        parseRequest(dir, onError),
-        setRequestExpires(cacheType, maxAge),
-        zlibResponse(zlibType)
-    ]);
+    return [
+        {
+            context: dir,
+            handler: parseRequest(dir, onError),
+        },
+        {
+            context: dir,
+            handler: setRequestExpires(cacheType, maxAge),
+        },
+        {
+            context: dir,
+            handler: zlibResponse(zlibType)
+        },
+    ];
 };
