@@ -1,24 +1,43 @@
 #!/usr/bin/env node
 
+
+/**
+ *****************************************
+ * Created by lifx
+ * Created on 2018-07-19 17:03:21
+ *****************************************
+ */
 'use strict';
 
+
+/**
+ *****************************************
+ * 加载依赖
+ *****************************************
+ */
 const
-    path = require('path'),
-    args = require('./args'),
-    server = require('../src'),
-    cwd = process.cwd();
+    ip = require('@arted/utils/ip'),
+    yargs = require('yargs'),
+    server = require('../lib');
 
 
-let
-    dist = args.d || args.dist,
-    port = args.p || args.port;
+/**
+ *****************************************
+ * 初始化参数
+ *****************************************
+ */
+yargs
+    .default('root', process.cwd())
+    .default('public', 'public')
+    .default('middleware', 'middleware')
+    .default('host', ip())
+    .default('port', 10030)
+    .boolean('https');
 
 
-if (dist && dist !== true) {
-    dist = path.resolve(cwd, dist);
-} else {
-    dist = args._[0] ?
-        path.resolve(cwd, args._[0]) : cwd;
-}
-
-server(dist).listen(port);
+/**
+ *****************************************
+ * 创建服务器
+ *****************************************
+ */
+module.exports = server(yargs.argv);

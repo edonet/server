@@ -1,2 +1,2 @@
 # server
-build a static nodejs server
+nodejs server

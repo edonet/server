@@ -1,25 +1,33 @@
 {
-  "name": "edonet-server",
-  "version": "0.0.1",
-  "description": "nodejs server",
-  "main": "index.js",
-  "scripts": {
-    "test": "node ./bin/server"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/edonet/server.git"
-  },
-  "keywords": [
-    "node",
-    "js",
-    "server"
-  ],
-  "bin": { "server": "bin/server.js" },
-  "author": "lifx",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/edonet/server/issues"
-  },
-  "homepage": "https://github.com/edonet/server#readme"
+    "name": "@arted/server",
+    "version": "0.0.1",
+    "description": "nodejs server",
+    "keywords": [
+        "node",
+        "js",
+        "server"
+    ],
+    "main": "./lib/index.js",
+    "bin": {
+        "server": "./bin/server.js"
+    },
+    "scripts": {
+        "start": "node ./bin/server.js"
+    },
+    "author": "lifx",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/edonet/server.git"
+    },
+    "bugs": {
+        "url": "https://github.com/edonet/server/issues"
+    },
+    "homepage": "https://github.com/edonet/server#readme",
+    "dependencies": {
+        "@arted/utils": "^0.0.113",
+        "koa": "^2.5.2",
+        "koa-sslify": "^2.1.2",
+        "yargs": "^12.0.1"
+    }
 }
