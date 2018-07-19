@@ -28,7 +28,7 @@ const
  */
 yargs
     .default('root', process.cwd())
-    .default('public', 'public')
+    .default('static', 'static')
     .default('middleware', 'middleware')
     .default('host', ip())
     .default('port', 10030)
