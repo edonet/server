@@ -28,8 +28,9 @@ const
  */
 yargs
     .default('root', process.cwd())
-    .default('static', 'static')
+    .default('static', 'public')
     .default('middleware', 'middleware')
+    .default('router', 'router')
     .default('host', ip())
     .default('port', 10030)
     .boolean('https');
