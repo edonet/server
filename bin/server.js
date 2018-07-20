@@ -16,9 +16,12 @@
  *****************************************
  */
 const
-    ip = require('@arted/utils/ip'),
+    pm2 = require('pm2'),
     yargs = require('yargs'),
-    server = require('../lib');
+    fs = require('@arted/utils/fs'),
+    path = require('@arted/utils/path'),
+    stdout = require('@arted/utils/stdout'),
+    appName = 'PM2_SERVER_' + Math.random().toString(16).slice(2, 10);
 
 
 /**
@@ -28,18 +31,107 @@ const
  */
 yargs
     .default('root', process.cwd())
-    .default('static', 'static')
-    .default('public', 'public')
     .default('middleware', 'middleware')
-    .default('router', 'router')
-    .default('host', ip())
-    .default('port', 10030)
-    .boolean('https');
+    .default('router', 'router');
 
 
 /**
  *****************************************
- * 创建服务器
+ * 启动线程
  *****************************************
  */
-module.exports = server(yargs.argv);
+pm2.connect(async function (err) {
+    let argv = yargs.argv,
+        dir = path.usedir(argv.root),
+        watch;
+
+
+    // 处理错误
+    if (err) {
+        return stdout.error(err);
+    }
+
+    // 启动接收信息
+    pm2.launchBus((err, bus) => {
+        let restart = 0;
+
+        // 处理错误
+        if (err) {
+            return stdout.error(err);
+        }
+
+        // 监听信息
+        bus.on('process:server', ({ data }) => {
+
+            // 打印信息
+            if (data.type === 'stdout') {
+
+                // 打印信息
+                if (!data.start || !restart) {
+                    stdout[data.method](...data.message);
+                }
+
+                // 统计重启次数
+                data.start && restart ++;
+            }
+        });
+    });
+
+    // 退出进程
+    process.on('SIGINT', () => {
+        pm2.delete(appName, err => {
+            err && stdout.error(err);
+            process.exit(1);
+        });
+    });
+
+
+    // 获取监听文件
+    watch = await stat(
+        dir(argv.middleware),
+        dir(argv.router)
+    );
+
+    // 启动脚本
+    start({
+        name: appName,
+        script: path.resolve(__dirname, './app.js'),
+        cwd: process.cwd(),
+        args: process.argv.slice(2),
+        watch: [
+            path.resolve(__dirname, '../lib'),
+            ...watch
+        ]
+    });
+});
+
+
+/**
+ *****************************************
+ * 启动脚本
+ *****************************************
+ */
+function start(options) {
+    pm2.start(options, err => {
+
+        // 处理错误
+        if (err) {
+            return stdout.error(err);
+        }
+    });
+}
+
+
+/**
+ *****************************************
+ * 获取存在的文件
+ *****************************************
+ */
+async function stat(...args) {
+    let res = await Promise.all(
+            args.map(async file => await fs.stat(file) && file)
+        );
+
+    // 过滤结果
+    return res.filter(file => file);
+}

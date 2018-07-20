@@ -18,7 +18,7 @@ module.exports = [
         method: 'get',
         url: '/:page',
         callback: async (ctx) => {
-            ctx.body = ctx.params.method + ': ' + ctx.params.page;
+            ctx.body = ctx.params.method + ': page@@' + ctx.params.page;
         }
     }
 ];
