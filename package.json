@@ -1,6 +1,6 @@
 {
     "name": "@arted/server",
-    "version": "0.0.1",
+    "version": "0.0.101",
     "description": "nodejs server",
     "keywords": [
         "node",
