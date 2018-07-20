@@ -28,7 +28,8 @@ const
  */
 yargs
     .default('root', process.cwd())
-    .default('static', 'public')
+    .default('static', 'static')
+    .default('public', 'public')
     .default('middleware', 'middleware')
     .default('router', 'router')
     .default('host', ip())

@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@arted/utils@^0.0.113":
-  version "0.0.113"
-  resolved "https://registry.yarnpkg.com/@arted/utils/-/utils-0.0.113.tgz#3244aad85ee4a218f2c2bf73a8e6e719af2d9193"
+"@arted/utils@^0.0.114":
+  version "0.0.114"
+  resolved "https://registry.yarnpkg.com/@arted/utils/-/utils-0.0.114.tgz#a93f7972c95fed6ce4177076b178460b24ec7c89"
   dependencies:
     archiver "^2.1.1"
     babel-runtime "^6.26.0"
