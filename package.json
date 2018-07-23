@@ -1,6 +1,6 @@
 {
     "name": "@arted/server",
-    "version": "0.0.101",
+    "version": "0.0.102",
     "description": "nodejs server",
     "keywords": [
         "node",
@@ -27,6 +27,7 @@
     "homepage": "https://github.com/edonet/server#readme",
     "dependencies": {
         "@arted/utils": "^0.0.114",
+        "https-pem": "^2.0.0",
         "koa": "^2.5.2",
         "koa-body": "^4.0.4",
         "koa-logger": "^3.2.0",
