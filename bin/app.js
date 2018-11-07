@@ -31,7 +31,9 @@ yargs
     .default('router', 'router')
     .default('host', ip())
     .default('port', 10030)
-    .boolean('https');
+    .boolean('https')
+    .alias('h', 'host')
+    .alias('p', 'port');
 
 
 /**

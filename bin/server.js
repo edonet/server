@@ -20,8 +20,7 @@ const
     yargs = require('yargs'),
     fs = require('@arted/utils/fs'),
     path = require('@arted/utils/path'),
-    stdout = require('@arted/utils/stdout'),
-    appName = 'PM2_SERVER_' + Math.random().toString(16).slice(2, 10);
+    stdout = require('@arted/utils/stdout');
 
 
 /**
@@ -31,6 +30,7 @@ const
  */
 yargs
     .default('root', process.cwd())
+    .default('name', 'PM2_SERVER_' + Math.random().toString(16).slice(2, 10))
     .default('middleware', 'middleware')
     .default('router', 'router');
 
@@ -43,6 +43,7 @@ yargs
 pm2.connect(async function (err) {
     let argv = yargs.argv,
         dir = path.usedir(argv.root),
+        appName = argv.name,
         watch;
 
 
