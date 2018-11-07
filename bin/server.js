@@ -32,7 +32,8 @@ yargs
     .default('root', process.cwd())
     .default('name', 'PM2_SERVER_' + Math.random().toString(16).slice(2, 10))
     .default('middleware', 'middleware')
-    .default('router', 'router');
+    .default('router', 'router')
+    .alias('n', 'name');
 
 
 /**
