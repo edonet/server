@@ -29,9 +29,11 @@ yargs
     .default('public', 'public')
     .default('middleware', 'middleware')
     .default('router', 'router')
+    .default('api', 'api')
     .default('host', ip())
     .default('port', 10030)
     .boolean('https')
+    .alias('r', 'router')
     .alias('h', 'host')
     .alias('p', 'port');
 
