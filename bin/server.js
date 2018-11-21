@@ -18,9 +18,9 @@
 const
     pm2 = require('pm2'),
     yargs = require('yargs'),
-    fs = require('@arted/utils/fs'),
-    path = require('@arted/utils/path'),
-    stdout = require('@arted/utils/stdout');
+    fs = require('ztil/fs'),
+    path = require('ztil/path'),
+    stdout = require('ztil/stdout');
 
 
 /**

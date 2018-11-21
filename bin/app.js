@@ -13,7 +13,7 @@
  *****************************************
  */
 const
-    ip = require('@arted/utils/ip'),
+    ip = require('ztil/ip'),
     yargs = require('yargs'),
     server = require('../lib');
 

@@ -13,8 +13,8 @@
  *****************************************
  */
 const
-    fs = require('@arted/utils/fs'),
-    path = require('@arted/utils/path');
+    fs = require('ztil/fs'),
+    path = require('ztil/path');
 
 
 /**
