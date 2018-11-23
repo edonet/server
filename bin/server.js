@@ -33,8 +33,4 @@ yargs
  * 加载脚本
  *****************************************
  */
-if (yargs.argv.keepalived) {
-    require('../lib')().catch(console.error);
-} else {
-    require('./start');
-}
+require(yargs.argv.keepalived ? './app' : './start');
