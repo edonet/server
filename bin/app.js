@@ -12,30 +12,7 @@
  * 加载依赖
  *****************************************
  */
-const
-    ip = require('ztil/ip'),
-    yargs = require('yargs'),
-    server = require('../lib');
-
-
-/**
- *****************************************
- * 初始化参数
- *****************************************
- */
-yargs
-    .default('root', process.cwd())
-    .default('static', 'static')
-    .default('public', 'public')
-    .default('middleware', 'middleware')
-    .default('router', 'router')
-    .default('api', 'api')
-    .default('host', ip())
-    .default('port', 10030)
-    .boolean('https')
-    .alias('r', 'router')
-    .alias('h', 'host')
-    .alias('p', 'port');
+const server = require('../lib');
 
 
 /**
@@ -43,5 +20,5 @@ yargs
  * 创建服务器
  *****************************************
  */
-module.exports = server(yargs.argv);
+module.exports = server().catch(console.error);
 

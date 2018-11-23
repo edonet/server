@@ -1,19 +1,17 @@
 /**
  *****************************************
- * Created by lifx
- * Created on 2018-07-20 11:14:54
+ * Created by edonet@163.com
+ * Created on 2018-11-23 17:38:40
  *****************************************
  */
 'use strict';
 
 
-
 /**
  *****************************************
- * 中间件
+ * 定义配置
  *****************************************
  */
-module.exports = async (ctx, next) => {
-    ctx.params = { method: ctx.method || 'all' };
-    await next();
+module.exports = {
+    port: 10030
 };
