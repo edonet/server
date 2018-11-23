@@ -15,54 +15,26 @@
  * 加载依赖
  *****************************************
  */
-const pm2 = require('pm2');
-const path = require('ztil/path');
-const config = require('../lib/configure');
+const yargs = require('yargs');
 
 
 /**
  *****************************************
- * 启动线程
+ * 定义参数
  *****************************************
  */
-pm2.connect(async function (err) {
-    let dir = path.usedir(config.root),
-        watch = config.api;
-
-    // 处理错误
-    if (err) {
-        return console.error(err);
-    }
-
-    // 获取监听文件
-    if (config.watch) {
-        watch = [...watch, ...config.watch];
-    }
-
-    // 启动脚本
-    await start({
-        name: config.name,
-        script: path.resolve(__dirname, './app.js'),
-        cwd: process.cwd(),
-        args: process.argv.slice(2),
-        watch: [
-            path.resolve(__dirname, '../lib'),
-            ...watch.map(argv => dir(argv))
-        ]
-    });
-
-    // 判断链接
-    pm2.disconnect();
-});
+yargs
+    .boolean('keepalived')
+    .alias('k', 'keepalived');
 
 
 /**
  *****************************************
- * 启动脚本
+ * 加载脚本
  *****************************************
  */
-function start(options) {
-    return new Promise((resolve, reject) => {
-        pm2.start(options, err => err ? reject(err) : resolve());
-    });
+if (yargs.argv.keepalived) {
+    require('../lib')().catch(console.error);
+} else {
+    require('./start');
 }
