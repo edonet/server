@@ -3834,12 +3834,13 @@ ylru@^1.2.0:
   resolved "https://registry.yarnpkg.com/ylru/-/ylru-1.2.1.tgz#f576b63341547989c1de7ba288760923b27fe84f"
   integrity sha512-faQrqNMzcPCHGVC2aaOINk13K+aaBDUPjGWl0teOXywElLjyVAB6Oe2jj62jHYtwsU49jXhScYbvPENK+6zAvQ==
 
-ztil@^0.0.104:
-  version "0.0.104"
-  resolved "https://registry.yarnpkg.com/ztil/-/ztil-0.0.104.tgz#c010b3d6560a3c8638c5523752b8340cdfd4813c"
-  integrity sha512-Z4BnkQSJ1rYbMEwDehTs2YptW+Pp2rs4O7Aa+q4ubhsh7lDezMU/Z4+JQhQKaJ3G0c91SNuPvH9dLEVoapj7lg==
+ztil@^0.0.106:
+  version "0.0.106"
+  resolved "https://registry.yarnpkg.com/ztil/-/ztil-0.0.106.tgz#6c3db8dc7d5482cc55dd58e375ca32a23896b15d"
+  integrity sha512-xdwcmT45i+5499405/r+y5odVD8yR2Vne9AtCRNOr6qC//SVN9qKP0dIKNlTMt6t71hRkfKl7G5IeCKs4evbpg==
   dependencies:
     "@babel/core" "^7.1.6"
     "@babel/preset-env" "^7.1.6"
+    request "^2.88.0"
     xml2js "^0.4.19"
     xtil "^0.0.104"

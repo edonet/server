@@ -1,6 +1,6 @@
 {
     "name": "@arted/server",
-    "version": "0.0.109",
+    "version": "0.0.110",
     "description": "nodejs server",
     "keywords": [
         "node",
@@ -32,8 +32,7 @@
         "koa-sslify": "^2.1.2",
         "koa-static": "^5.0.0",
         "pm2": "^3.2.2",
-        "request": "^2.88.0",
         "yargs": "^12.0.5",
-        "ztil": "^0.0.104"
+        "ztil": "^0.0.106"
     }
 }
