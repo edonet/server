@@ -1,6 +1,6 @@
 {
     "name": "@arted/server",
-    "version": "0.0.110",
+    "version": "0.0.111",
     "description": "nodejs server",
     "keywords": [
         "node",
@@ -12,7 +12,7 @@
         "server": "./bin/server.js"
     },
     "scripts": {
-        "start": "node ./bin/server.js -k --root src",
+        "start": "node ./bin/server.js -a --root src",
         "server": "node ./bin/server.js --root src"
     },
     "author": "edoner <edonet@163.com>",
